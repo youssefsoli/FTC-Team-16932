@@ -39,4 +39,7 @@ public class Omnibot {
     public void drive(double strafe, double forward, double turn) {
         drive.driveFieldCentric(strafe, forward, turn, imu.getAbsoluteHeading());
     }
+    public void shoot() {
+
+    }
 }
