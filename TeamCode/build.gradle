@@ -22,4 +22,5 @@ dependencies {
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
     implementation 'com.arcrobotics.ftclib:vision:1.1.0'
     implementation 'com.arcrobotics:ftclib:1.1.6'
+    implementation 'org.openftc:rev-extensions-2:1.2'
 }

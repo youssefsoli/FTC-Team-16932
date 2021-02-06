@@ -12,7 +12,7 @@ import ca.webber.ftc.robot.Omnibot;
 
 @TeleOp(name = "Debug: Dead Wheel Encoder Test", group = "Debug")
 public class DeadWheelEncoderTest extends OpMode {
-    public static final double WHEEL_DIAMETER = 3.54;
+    public static final double WHEEL_DIAMETER = 1.9685;
     public static final double TICKS_PER_REV = 32767;
     public static final double DISTANCE_PER_PULSE = Math.PI * WHEEL_DIAMETER / TICKS_PER_REV;
     private MotorEx leftEncoder, rightEncoder, perpEncoder = null;
