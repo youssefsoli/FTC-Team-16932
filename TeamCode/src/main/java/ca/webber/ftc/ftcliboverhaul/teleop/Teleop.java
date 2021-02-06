@@ -2,6 +2,7 @@ package ca.webber.ftc.ftcliboverhaul.teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -38,9 +39,8 @@ public class Teleop extends CommandOpMode {
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
 
-//        GamepadKeys.Trigger trig = driver_gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
-//
-//        shooterSystem = new ShooterSystem(leftShooter, rightShooter);
-//        shooterCommand = new ShooterCommand(shooterSystem, driver_gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)::getValue);
+        shooterSystem = new ShooterSystem(leftShooter, rightShooter);
+        driver_gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
+        //shooterCommand = new ShooterCommand(shooterSystem, driver_gamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)::getValue);
     }
 }

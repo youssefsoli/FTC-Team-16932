@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.kinematics.HolonomicOdometry;
@@ -24,10 +26,10 @@ public class Teleop extends OpMode {
     private GamepadButton aButton, bButton;
     private double conveyorSpeed = 0, intakeSpeed = 0;
 
-    public static final double TRACKWIDTH = 14.31;
-    public static final double CENTER_WHEEL_OFFSET = 0.477;
-    public static final double WHEEL_DIAMETER = 2.0;
-    public static final double TICKS_PER_REV = 8192;
+    public static final double TRACKWIDTH = 10.625;
+    public static final double CENTER_WHEEL_OFFSET = 6;
+    public static final double WHEEL_DIAMETER = 3.54;
+    public static final double TICKS_PER_REV = 32767;
     public static final double DISTANCE_PER_PULSE = Math.PI * WHEEL_DIAMETER / TICKS_PER_REV;
 
     @Override
@@ -35,23 +37,25 @@ public class Teleop extends OpMode {
         this.gamepad1 = new GamepadEx(super.gamepad1);
         this.gamepad2 = new GamepadEx(super.gamepad2);
         omnibot = new Omnibot(this);
-        //leftEncoder = new MotorEx(hardwareMap, "lEnc");
-        //rightEncoder = new MotorEx(hardwareMap, "rEnc");
-        //perpEncoder = new MotorEx(hardwareMap, "perpEnc");
+        leftEncoder = new MotorEx(hardwareMap, "fR");
+        rightEncoder = new MotorEx(hardwareMap, "bR");
+        perpEncoder = new MotorEx(hardwareMap, "bL");
 
-//        leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-//        rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-//        perpEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-//
-//        odometry = new HolonomicOdometry(
-//                leftEncoder::getDistance,
-//                rightEncoder::getDistance,
-//                perpEncoder::getDistance,
-//                TRACKWIDTH,
-//                CENTER_WHEEL_OFFSET
-//        );
-//        odometry.updatePose(new Pose2d(0, 0, new Rotation2d()));
-//        telemetry.addData("Robot Position at Init: ", odometry.getPose());
+        leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+        rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+        perpEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+
+        leftEncoder.encoder.setDirection(Motor.Direction.REVERSE);
+
+        odometry = new HolonomicOdometry(
+                leftEncoder::getDistance,
+                rightEncoder::getDistance,
+                perpEncoder::getDistance,
+                TRACKWIDTH,
+                CENTER_WHEEL_OFFSET
+        );
+        odometry.updatePose(new Pose2d(0, 0, new Rotation2d()));
+        telemetry.addData("Robot Position at Init: ", odometry.getPose());
 
         aButton = new GamepadButton(gamepad1, GamepadKeys.Button.A);
         bButton = new GamepadButton(gamepad1, GamepadKeys.Button.B);
@@ -97,6 +101,8 @@ public class Teleop extends OpMode {
 //            omnibot.getWobbleLift().setPosition(1);
 //        else
 //            omnibot.getWobbleLift().setPosition(0);
+        odometry.updatePose();
+        telemetry.addData("Robot Position now: ", odometry.getPose());
         telemetry.update();
     }
 }
