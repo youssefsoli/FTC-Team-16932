@@ -2,7 +2,6 @@ package ca.webber.ftc.robot;
 
 import com.arcrobotics.ftclib.drivebase.HDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -22,7 +21,6 @@ public class Omnibot {
     private final Motor bL;
     private final Motor bR;
     private final HDrive drive;
-    private final RevIMU imu;
     private final Shooter shooter;
     private final Motor conveyor, intake;
     private final Servo wobbleGrab, wobbleLift;
@@ -32,8 +30,6 @@ public class Omnibot {
         this.telemetry = opMode.telemetry;
         this.gamepad1 = new GamepadEx(opMode.gamepad1);
         this.gamepad2 = new GamepadEx(opMode.gamepad2);
-
-        imu = new RevIMU(hardwareMap);
 
         fL = new Motor(hardwareMap, "fL");
         fR = new Motor(hardwareMap, "fR");
@@ -50,8 +46,8 @@ public class Omnibot {
         wobbleLift = hardwareMap.get(Servo.class, "wobbleLift");
     }
 
-    public void drive(double strafe, double forward, double turn) {
-        drive.driveFieldCentric(strafe, forward, turn, imu.getAbsoluteHeading());
+    public void drive(double strafe, double forward, double turn, double heading) {
+        drive.driveFieldCentric(strafe, forward, turn, heading);
     }
 
     public void shoot() {

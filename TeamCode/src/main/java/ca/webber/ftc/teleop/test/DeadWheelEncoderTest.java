@@ -60,9 +60,9 @@ public class DeadWheelEncoderTest extends OpMode {
         odometry.updatePose();
         telemetry.addData("Robot Position now: ", odometry.getPose());
         if (odometry.getPose().getRotation().getDegrees() < 40)
-            omnibot.drive(0, 0, -0.2);
-        else if (odometry.getPose().getRotation().getDegrees() > 1006)
-            omnibot.drive(0, 0, 0.2);
+            omnibot.drive(0, 0, -0.2, 0);
+        else if (odometry.getPose().getRotation().getDegrees() > 100)
+            omnibot.drive(0, 0, 0.2, 0);
         telemetry.update();
     }
 

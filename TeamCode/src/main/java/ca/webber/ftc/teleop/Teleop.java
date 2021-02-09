@@ -26,10 +26,10 @@ public class Teleop extends OpMode {
     private GamepadButton aButton, bButton;
     private double conveyorSpeed = 0, intakeSpeed = 0;
 
-    public static final double TRACKWIDTH = 10.625;
-    public static final double CENTER_WHEEL_OFFSET = 6;
-    public static final double WHEEL_DIAMETER = 1.9685;
-    public static final double TICKS_PER_REV = 32767;
+    public static final double TRACKWIDTH = 27.42;
+    public static final double CENTER_WHEEL_OFFSET = 15;
+    public static final double WHEEL_DIAMETER = 6;
+    public static final double TICKS_PER_REV = 8192;
     public static final double DISTANCE_PER_PULSE = Math.PI * WHEEL_DIAMETER / TICKS_PER_REV;
 
     @Override
@@ -45,7 +45,8 @@ public class Teleop extends OpMode {
         rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         perpEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 
-        leftEncoder.encoder.setDirection(Motor.Direction.REVERSE);
+        rightEncoder.encoder.setDirection(Motor.Direction.REVERSE);
+        perpEncoder.encoder.setDirection(Motor.Direction.REVERSE);
 
         odometry = new HolonomicOdometry(
                 leftEncoder::getDistance,
@@ -73,10 +74,14 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
+        odometry.updatePose();
+        telemetry.addData("Robot Position now: ", odometry.getPose());
+        telemetry.update();
         omnibot.drive(
                 Range.clip(Math.pow(gamepad1.getLeftX(), 3), -0.5, 0.5),
                 Range.clip(Math.pow(gamepad1.getLeftY(), 3), -0.5, 0.5),
-                Range.clip(Math.pow(-gamepad1.getRightX(), 3), -0.5, 0.5));
+                Range.clip(Math.pow(-gamepad1.getRightX(), 3), -0.5, 0.5),
+                odometry.getPose().getRotation().getDegrees());
         if (gamepad1.gamepad.right_bumper)
             intakeSpeed = -1;
         else if (gamepad1.gamepad.left_bumper)
@@ -101,8 +106,5 @@ public class Teleop extends OpMode {
 //            omnibot.getWobbleLift().setPosition(1);
 //        else
 //            omnibot.getWobbleLift().setPosition(0);
-        odometry.updatePose();
-        telemetry.addData("Robot Position now: ", odometry.getPose());
-        telemetry.update();
     }
 }
