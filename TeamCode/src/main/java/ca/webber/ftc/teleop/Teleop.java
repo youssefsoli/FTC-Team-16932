@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.kinematics.HolonomicOdometry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,42 +18,19 @@ import ca.webber.ftc.robot.Omnibot;
 public class Teleop extends OpMode {
     private Omnibot omnibot;
     private GamepadEx gamepad1, gamepad2;
+    private HolonomicOdometry odometry;
 
     // odometry stuff
-    private MotorEx leftEncoder, rightEncoder, perpEncoder;
-    private HolonomicOdometry odometry;
     private GamepadButton aButton, bButton;
     private double conveyorSpeed = 0, intakeSpeed = 0;
-
-    public static final double TRACKWIDTH = 27.42;
-    public static final double CENTER_WHEEL_OFFSET = 15;
-    public static final double WHEEL_DIAMETER = 6;
-    public static final double TICKS_PER_REV = 8192;
-    public static final double DISTANCE_PER_PULSE = Math.PI * WHEEL_DIAMETER / TICKS_PER_REV;
 
     @Override
     public void init() {
         this.gamepad1 = new GamepadEx(super.gamepad1);
         this.gamepad2 = new GamepadEx(super.gamepad2);
         omnibot = new Omnibot(this);
-        leftEncoder = new MotorEx(hardwareMap, "fR");
-        rightEncoder = new MotorEx(hardwareMap, "bR");
-        perpEncoder = new MotorEx(hardwareMap, "bL");
 
-        leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-        rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-        perpEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-
-        rightEncoder.encoder.setDirection(Motor.Direction.REVERSE);
-        perpEncoder.encoder.setDirection(Motor.Direction.REVERSE);
-
-        odometry = new HolonomicOdometry(
-                leftEncoder::getDistance,
-                rightEncoder::getDistance,
-                perpEncoder::getDistance,
-                TRACKWIDTH,
-                CENTER_WHEEL_OFFSET
-        );
+        odometry = omnibot.getOdometry();
         odometry.updatePose(new Pose2d(0, 0, new Rotation2d()));
         telemetry.addData("Robot Position at Init: ", odometry.getPose());
 
@@ -76,7 +52,6 @@ public class Teleop extends OpMode {
     public void loop() {
         odometry.updatePose();
         telemetry.addData("Robot Position now: ", odometry.getPose());
-        telemetry.update();
         omnibot.drive(
                 Range.clip(Math.pow(gamepad1.getLeftX(), 3), -0.5, 0.5),
                 Range.clip(Math.pow(gamepad1.getLeftY(), 3), -0.5, 0.5),
@@ -91,6 +66,7 @@ public class Teleop extends OpMode {
 
         conveyorSpeed = gamepad1.gamepad.left_trigger;
         omnibot.getShooter().setVelocity(gamepad1.gamepad.right_trigger);
+        telemetry.addData("Shooter power: ", gamepad1.gamepad.right_trigger);
         omnibot.getConveyor().set(conveyorSpeed);
         omnibot.getIntake().set(intakeSpeed);
         //odometry.updatePose();
@@ -106,5 +82,7 @@ public class Teleop extends OpMode {
 //            omnibot.getWobbleLift().setPosition(1);
 //        else
 //            omnibot.getWobbleLift().setPosition(0);
+
+        telemetry.update();
     }
 }
