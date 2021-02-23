@@ -39,17 +39,17 @@ public class FourStack extends LinearOpMode {
         omnibot.getShooter().setVelocity(1);
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d(drive.getPoseEstimate().getX(),
                 drive.getPoseEstimate().getY(), 0), Math.toRadians(160))
-                .splineToConstantHeading(new Vector2d(-7, -12), Math.toRadians(150))
+                .splineToConstantHeading(new Vector2d(-5, -12), Math.toRadians(150))
                 .addTemporalMarker(8, () -> {
                     omnibot.getIntake().set(1);
                     sleep(500);
                     omnibot.getIntake().set(0);
-                    drive.turn(Math.toRadians(10));
+                    drive.turn(Math.toRadians(6));
                     sleep(2000);
                     omnibot.getIntake().set(1);
                     sleep(500);
                     omnibot.getIntake().set(0);
-                    drive.turn(Math.toRadians(10));
+                    drive.turn(Math.toRadians(4.5));
                     sleep(2000);
                     omnibot.getIntake().set(1);
                     sleep(500);
@@ -65,13 +65,13 @@ public class FourStack extends LinearOpMode {
 
         drive.followTrajectory(drive.trajectoryBuilder(new Pose2d(drive.getPoseEstimate().getX(),
                 drive.getPoseEstimate().getY(), drive.getPoseEstimate().getHeading()), Math.toRadians(90))
-                .forward(28)
+                .forward(23)
                 .addTemporalMarker(2, () -> {
                     omnibot.getWobbleGrab().setPosition(1);
                     sleep(1000);
                     omnibot.getWobbleLift().setPosition(1);
-                    sleep(2000);
                 })
                 .build());
+        sleep(2000);
     }
 }
