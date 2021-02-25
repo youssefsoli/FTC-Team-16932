@@ -19,19 +19,19 @@ import ca.webber.ftc.subsystems.Vision;
 public class RedUltimateGoalAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+        Omnibot omnibot = new Omnibot(this, false);
         MecanumDrive drive = new MecanumDrive(hardwareMap);
-        Omnibot omnibot = new Omnibot(this);
         Vision vision = new Vision(hardwareMap);
 
         omnibot.getIntake().setRunMode(Motor.RunMode.RawPower);
         omnibot.getWobbleGrab().setPosition(1);
 
-        Pose2d startPose = new Pose2d(-60, -48, 0);
-
-        drive.setPoseEstimate(startPose);
+        // Set initial position
+        drive.setPoseEstimate(new Pose2d(-60, -48, 0));
 
         while (!isStarted()) {
             telemetry.addData("Vision ready!", vision.getHeight());
+            telemetry.addData("Pose: ", drive.getPoseEstimate());
             telemetry.update();
         }
 
@@ -43,6 +43,9 @@ public class RedUltimateGoalAuto extends LinearOpMode {
         vision.stop();
 
         UGRoutine routine = null;
+
+        telemetry.addData("Pose: ", drive.getPoseEstimate());
+        telemetry.update();
 
         switch (height) {
             case ZERO:

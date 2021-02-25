@@ -1,6 +1,5 @@
 package ca.webber.ftc.teleop;
 
-import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -16,8 +15,6 @@ public class Teleop extends OpMode {
     private Omnibot omnibot;
     private GamepadEx gamepad1, gamepad2;
     private StandardTrackingWheelLocalizer odometry;
-
-    private GamepadButton aButton, bButton;
     private double conveyorSpeed = 0, intakeSpeed = 0;
 
     @Override

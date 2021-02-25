@@ -1,5 +1,6 @@
 package ca.webber.ftc.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.vision.UGContourRingPipeline;
 import com.arcrobotics.ftclib.vision.UGContourRingPipeline.Height;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -17,13 +18,15 @@ public class Vision {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
 
-        camera.openCameraDevice();
-
         visionPipeLine = new UGContourRingPipeline();
 
         camera.setPipeline(visionPipeLine);
 
-        camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        camera.openCameraDeviceAsync(() -> {
+            camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        });
+
+        FtcDashboard.getInstance().startCameraStream(camera, 30);
     }
 
     public Height getHeight() {
