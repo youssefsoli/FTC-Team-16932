@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.List;
 
-import ca.webber.ftc.robot.roadrunner.SampleMecanumDrive;
+import ca.webber.ftc.robot.roadrunner.MecanumDrive;
 
 import static ca.webber.ftc.robot.roadrunner.DriveConstants.MAX_ACCEL;
 import static ca.webber.ftc.robot.roadrunner.DriveConstants.MAX_VEL;
@@ -69,7 +69,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        MecanumDrive drive = new MecanumDrive(hardwareMap);
 
         Mode mode = Mode.TUNING_MODE;
 

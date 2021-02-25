@@ -1,26 +1,22 @@
 package ca.webber.ftc.teleop;
 
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.kinematics.HolonomicOdometry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 import ca.webber.ftc.robot.Omnibot;
+import ca.webber.ftc.robot.roadrunner.StandardTrackingWheelLocalizer;
+import ca.webber.ftc.subsystems.PoseStorage;
 
 @TeleOp(name = "Teleop", group = "Iterative Opmodes")
 public class Teleop extends OpMode {
     private Omnibot omnibot;
     private GamepadEx gamepad1, gamepad2;
-    private HolonomicOdometry odometry;
+    private StandardTrackingWheelLocalizer odometry;
 
-    // odometry stuff
     private GamepadButton aButton, bButton;
     private double conveyorSpeed = 0, intakeSpeed = 0;
 
@@ -31,57 +27,43 @@ public class Teleop extends OpMode {
         omnibot = new Omnibot(this);
 
         odometry = omnibot.getOdometry();
-        odometry.updatePose(new Pose2d(0, 0, new Rotation2d()));
-        telemetry.addData("Robot Position at Init: ", odometry.getPose());
+        odometry.setPoseEstimate(PoseStorage.currentPose);
 
-        aButton = new GamepadButton(gamepad1, GamepadKeys.Button.A);
-        bButton = new GamepadButton(gamepad1, GamepadKeys.Button.B);
+        telemetry.addData("Robot Position at Init: ", odometry.getPoseEstimate());
+
         omnibot.getConveyor().setRunMode(Motor.RunMode.RawPower);
         omnibot.getIntake().setRunMode(Motor.RunMode.RawPower);
-
-        aButton
-                .whenPressed(new InstantCommand(() -> conveyorSpeed = 1))
-                .whenReleased(new InstantCommand(() -> conveyorSpeed = 0));
-
-        bButton
-                .whenPressed(new InstantCommand(() -> intakeSpeed = 1))
-                .whenReleased(new InstantCommand(() -> intakeSpeed = 0));
     }
 
     @Override
     public void loop() {
-        odometry.updatePose();
-        telemetry.addData("Robot Position now: ", odometry.getPose());
-        omnibot.drive(
-                Range.clip(Math.pow(gamepad1.getLeftX(), 3), -0.5, 0.5),
-                Range.clip(Math.pow(gamepad1.getLeftY(), 3), -0.5, 0.5),
-                Range.clip(Math.pow(-gamepad1.getRightX(), 3), -0.5, 0.5),
-                odometry.getPose().getRotation().getDegrees());
+        odometry.update();
+        telemetry.addData("Robot Position now: ", odometry.getPoseEstimate());
+
+        double speedMultiplier = 3 * gamepad1.gamepad.right_trigger / 4;
         if (gamepad1.gamepad.right_bumper)
+            speedMultiplier = 1;
+        omnibot.drive(
+                Range.clip(Math.pow(gamepad1.getLeftX(), 3), -speedMultiplier, speedMultiplier),
+                Range.clip(Math.pow(gamepad1.getLeftY(), 3), -speedMultiplier, speedMultiplier),
+                Range.clip(Math.pow(-gamepad1.getRightX(), 3), -0.7, 0.7),
+                odometry.getPoseEstimate().getHeading());
+
+        if (gamepad2.gamepad.right_bumper)
             intakeSpeed = -1;
-        else if (gamepad1.gamepad.left_bumper)
+        else if (gamepad2.gamepad.left_bumper)
             intakeSpeed = 1;
         else
             intakeSpeed = 0;
 
-        conveyorSpeed = gamepad1.gamepad.left_trigger;
-        omnibot.getShooter().setVelocity(gamepad1.gamepad.right_trigger);
-        telemetry.addData("Shooter power: ", gamepad1.gamepad.right_trigger);
+        conveyorSpeed = gamepad2.gamepad.left_trigger;
+        omnibot.getShooter().setVelocity(gamepad2.gamepad.right_trigger);
+        telemetry.addData("Shooter power: ", gamepad2.gamepad.right_trigger);
         omnibot.getConveyor().set(conveyorSpeed);
         omnibot.getIntake().set(intakeSpeed);
-        //odometry.updatePose();
 
-        omnibot.getWobbleGrab().setPosition(gamepad1.gamepad.a ? 1 : 0);
-//        if(gamepad1.gamepad.a)
-//            omnibot.getWobbleGrab().setPosition(1);
-//        else
-//            omnibot.getWobbleGrab().setPosition(0);
-
-        omnibot.getWobbleLift().setPosition(gamepad1.gamepad.b ? 1 : 0);
-//        if(gamepad1.gamepad.b)
-//            omnibot.getWobbleLift().setPosition(1);
-//        else
-//            omnibot.getWobbleLift().setPosition(0);
+        omnibot.getWobbleGrab().setPosition(gamepad2.gamepad.a ? 1 : 0);
+        omnibot.getWobbleLift().setPosition(gamepad2.gamepad.b ? 1 : 0);
 
         telemetry.update();
     }

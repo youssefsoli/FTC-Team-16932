@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import java.util.Objects;
 
-import ca.webber.ftc.robot.roadrunner.SampleMecanumDrive;
+import ca.webber.ftc.robot.roadrunner.MecanumDrive;
 
 import static ca.webber.ftc.robot.roadrunner.DriveConstants.MAX_ACCEL;
 import static ca.webber.ftc.robot.roadrunner.DriveConstants.MAX_VEL;
@@ -49,7 +49,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    private SampleMecanumDrive drive;
+    private MecanumDrive drive;
     private Mode mode;
 
     private static MotionProfile generateProfile(boolean movingForward) {
@@ -67,7 +67,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new SampleMecanumDrive(hardwareMap);
+        drive = new MecanumDrive(hardwareMap);
 
         mode = Mode.TUNING_MODE;
 

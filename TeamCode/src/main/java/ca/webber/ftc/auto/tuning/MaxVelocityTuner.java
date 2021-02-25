@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.Objects;
 
 import ca.webber.ftc.robot.roadrunner.DriveConstants;
-import ca.webber.ftc.robot.roadrunner.SampleMecanumDrive;
+import ca.webber.ftc.robot.roadrunner.MecanumDrive;
 
 /**
  * This routine is designed to calculate the maximum velocity your bot can achieve under load. It
@@ -33,7 +33,7 @@ public class MaxVelocityTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        MecanumDrive drive = new MecanumDrive(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
