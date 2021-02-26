@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -23,7 +24,7 @@ public class Omnibot {
     private final Shooter shooter;
     private final Motor conveyor, intake;
     private final Servo wobbleGrab, wobbleLift;
-    //private final CRServo dropperServo;
+    private final CRServo dropperServo;
     private final Motor fL, fR, bL, bR;
     private StandardTrackingWheelLocalizer odometry;
 
@@ -51,7 +52,8 @@ public class Omnibot {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        //dropperServo = hardwareMap.get(CRServo.class, "dropperServo");
+        dropperServo = hardwareMap.get(CRServo.class, "dropperServo");
+        dropperServo.setPower(0);
 
         // Initialize localizer
         odometry = new StandardTrackingWheelLocalizer(hardwareMap);
@@ -81,7 +83,8 @@ public class Omnibot {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        //dropperServo = hardwareMap.get(CRServo.class, "dropperServo");
+        dropperServo = hardwareMap.get(CRServo.class, "dropperServo");
+        dropperServo.setPower(0);
     }
 
     public void drive(double strafe, double forward, double turn, double heading) {
@@ -94,6 +97,10 @@ public class Omnibot {
 
     public Pose2d getPose() {
         return odometry.getPoseEstimate();
+    }
+
+    public CRServo getDropperServo() {
+        return dropperServo;
     }
 
     public Shooter getShooter() {
