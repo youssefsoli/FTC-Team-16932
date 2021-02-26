@@ -76,7 +76,16 @@ public class OneStack extends UGRoutine {
                 .addDisplacementMarker(() -> {
                     omnibot.getWobbleLift().setPosition(0);
                     omnibot.getWobbleGrab().setPosition(0);
+                    opMode.sleep(500);
                 })
+                .build());
+
+        drive.followTrajectory(drive.trajectoryBuilder(drive.getPoseEstimate(), 0)
+                .addDisplacementMarker(() -> {
+                    omnibot.getWobbleLift().setPosition(1);
+                    opMode.sleep(500);
+                })
+                .strafeLeft(24)
                 .build());
 
 //        drive.followTrajectory(drive.trajectoryBuilder(drive.getPoseEstimate(), Math.toRadians(90))

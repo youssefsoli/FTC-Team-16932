@@ -19,7 +19,7 @@ public class ZeroStack extends UGRoutine {
         omnibot.getIntake().setRunMode(Motor.RunMode.RawPower);
         omnibot.getWobbleGrab().setPosition(1);
 
-        // Drop wobble at zone A
+        // Drop wobble at zone C
         drive.followTrajectory(drive.trajectoryBuilder(drive.getPoseEstimate(), Math.toRadians(-20))
                 .addDisplacementMarker(120, () -> {
                     omnibot.getWobbleLift().setPosition(0);
@@ -66,7 +66,7 @@ public class ZeroStack extends UGRoutine {
                 })
                 .build());
 
-        // Drop wobble at zone A
+        // Drop wobble at zone C
         drive.followTrajectory(drive.trajectoryBuilder(drive.getPoseEstimate(), 0)
                 .splineToLinearHeading(new Pose2d(44, -60, 0), Math.toRadians(-40))
                 .addDisplacementMarker(() -> {

@@ -72,6 +72,7 @@ public class FourStack extends UGRoutine {
                 .addDisplacementMarker(() -> {
                     omnibot.getWobbleLift().setPosition(0);
                     omnibot.getWobbleGrab().setPosition(0);
+                    opMode.sleep(500);
                 })
                 .build());
 

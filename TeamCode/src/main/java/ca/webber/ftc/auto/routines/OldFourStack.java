@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import ca.webber.ftc.robot.Omnibot;
 import ca.webber.ftc.robot.roadrunner.MecanumDrive;
 
-@Autonomous(name = "Four Stack")
+@Autonomous(name = "Old Four Stack")
 public class OldFourStack extends LinearOpMode {
 
     @Override
