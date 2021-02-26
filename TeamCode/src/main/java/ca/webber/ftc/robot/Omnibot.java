@@ -77,6 +77,10 @@ public class Omnibot {
         wobbleGrab = hardwareMap.get(Servo.class, "wobbleGrab");
         wobbleLift = hardwareMap.get(Servo.class, "wobbleLift");
 
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+
         //dropperServo = hardwareMap.get(CRServo.class, "dropperServo");
     }
 
