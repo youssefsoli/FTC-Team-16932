@@ -59,6 +59,8 @@ public class Teleop extends OpMode {
             omnibot.getDropperServo().setPower(0);
 
         conveyorSpeed = gamepad2.gamepad.left_trigger;
+        if (gamepad2.gamepad.y)
+            conveyorSpeed = -1;
         omnibot.getShooter().setVelocity(gamepad2.gamepad.right_trigger);
         telemetry.addData("Shooter power: ", gamepad2.gamepad.right_trigger);
         omnibot.getConveyor().set(conveyorSpeed);
