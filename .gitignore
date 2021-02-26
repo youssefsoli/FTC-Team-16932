@@ -85,3 +85,36 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+.gradle
+/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+# Android Studio config files
+.idea
+
+# Proprietary Source
+FtcRobotController
+
+# TeamCode build files
+TeamCode/build/
+local.properties
+TeamCode/TeamCode.iml
+FTC-Team-16932.iml
+TeamCode/build.gradle
+TeamCode/build.release.gradle
+TeamCode/src/main/AndroidManifest.xml
+TeamCode/src/main/java/org/firstinspires/ftc/teamcode/readme.md
+TeamCode/src/main/res/values/strings.xml
+TeamCode/src/main/res/xml/teamwebcamcalibrations.xml
